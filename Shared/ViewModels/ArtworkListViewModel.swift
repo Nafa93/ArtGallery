@@ -28,7 +28,6 @@ class ArtworkListViewModel: ObservableObject {
         
         Task {
             do {
-                print("FETCHING #\(currentPage)")
                 let artworks = try await repository.fetchArtworks(for: currentPage)
                 
                 DispatchQueue.main.async {
@@ -57,5 +56,5 @@ class ArtworkListViewModel: ObservableObject {
             self.currentPage += 1
             fetchArtworks()
         }
-      }
+    }
 }

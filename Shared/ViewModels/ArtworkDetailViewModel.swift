@@ -12,6 +12,7 @@ class ArtworkDetailViewModel: ObservableObject {
     @Published var artist: Artist?
     @Published var theme: ArtworkDetailTheme = DefaultArtworkDetailTheme()
     @Published var isErrorPresented = false
+    @Published var isLoading = false
     
     private var motionManager: DefaultMotionManager
     private var repository: AnyArtistRepository
@@ -19,7 +20,11 @@ class ArtworkDetailViewModel: ObservableObject {
     var artwork: Artwork
     
     var title: String {
-        return artwork.artistTitle ?? "Anonymous work"
+        return artwork.title
+    }
+    
+    var artistTitle: String {
+        return artwork.artistTitle ?? "Anonymous artist"
     }
     
     var birthDate: String {
@@ -55,16 +60,20 @@ class ArtworkDetailViewModel: ObservableObject {
             return
         }
         
+        self.isLoading = true
+        
         Task {
             do {
                 let artist = try await repository.fetchArtist(artistId: id)
                 
                 DispatchQueue.main.async {
                     self.artist = artist
+                    self.isLoading = false
                 }
             } catch {
                 DispatchQueue.main.async {
                     self.isErrorPresented = true
+                    self.isLoading = false
                 }
             }
         }

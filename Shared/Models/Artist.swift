@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Artist: Codable {
+struct Artist: Codable, Equatable {
     var birthDate: Int
     var deathDate: Int
 }
